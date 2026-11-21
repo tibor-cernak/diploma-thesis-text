@@ -1,15 +1,11 @@
-# nechajte iba jeden z main.pdf a main-en.pdf
-all: main.pdf main-en.pdf
+all: main.pdf
 
-main.pdf: main.tex *.tex *.bib images/*
+main.pdf: main.tex chapters/*.tex *.bib images/*
 	pdflatex main
 	bibtex main
 	pdflatex main
 	pdflatex main
 
-
-main-en.pdf: main-en.tex *.tex *.bib images/*
-	pdflatex main-en
-	bibtex main-en
-	pdflatex main-en
-	pdflatex main-en
+clean:
+	rm -f main.aux main.bbl main.blg main.fdb_latexmk main.fls \
+	      main.lof main.log main.lot main.out main.toc main.synctex.gz

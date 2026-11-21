@@ -1,45 +1,84 @@
 %\documentclass[12pt, twoside]{book}
 \documentclass[12pt, oneside]{book}  % jednostranna tlac
 
+%spravne nastavenie okrajov
 \usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=3.5cm,right=2cm]{geometry}
+%zapnutie fontov pre UTF8 kodovanie
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
+%zapnutie slovenskeho delenia slov
+%a automatickych nadpisov ako Obsah, Obrázok a pod. v slovencine
+\usepackage[slovak]{babel} % vypnite pre prace v anglictine!
+
+%nastavenie riadkovania podla smernice
 \linespread{1.25} % hodnota 1.25 by mala zodpovedat 1.5 riadkovaniu
 
+% balicek na vkladanie zdrojoveho kodu
 \usepackage{listings}
+% ukazky kodu su cislovane ako Listing 1,2,...
+% tu je Listing zmenene na Algoritmus 1,2,...
+\renewcommand{\lstlistingname}{Algoritmus}
+% nastavenia balicka listings
+% mozete pridat aj language=...
+% na nastavenie najcastejsie pouzivaneho prog. jazyka
+% takisto sa da zapnut cislovanie riadkov
+\lstset{frame=lines}
 
+% balicek na vkladanie obrazkov
 \usepackage{graphicx}
+% balicek na vkladanie celych pdf dokumentov, tu zadanie
 \usepackage{pdfpages}
+% balicek na spravne formatovanie URL
 \usepackage{url}
+% balicek na hyperlinky v ramci dokumentu
+% zrusime farebne ramiky okolo liniek aby pdf
+% vyzeralo rovnako ako tlacena verzia
 \usepackage[hidelinks,breaklinks]{hyperref}
 
+% balicek pre matematicke prostredia a vyrazy
 \usepackage{amsmath}
 
+% prikaz \uv pre slovenske uvodzovky („...“)
+% (niektore verzie babel ho definuju samy, preto \providecommand)
+\providecommand{\uv}[1]{\quotedblbase #1\textquotedblleft}
+
+
+% -------------------
+% --- Definicia zakladnych pojmov
+% --- Vyplnte podla vasho zadania, rok ma byt rok odovzdania
+% -------------------
 \def\mfrok{2027}
-\def\mfnazov{Design and Implementation of a Tool for Software Inventory and Vulnerability Identification}
-\def\mftyp{Master Thesis}
+\def\mfnazov{Návrh a implementácia nástroja na softvérovú inventúru a identifikáciu zraniteľností}
+\def\mftyp{Diplomová práca}
 \def\mfautor{Bc. Tibor Černák}
 \def\mfskolitel{prof. RNDr. Roman Ďurikovič, PhD.}
-\def\mfkonzultant{Ing. Peter Pištek, PhD.}  
+
+%ak mate konzultanta, odkomentujte aj jeho meno na titulnom liste
+\def\mfkonzultant{Ing. Peter Pištek, PhD.}
 
 \def\mfmiesto{Bratislava, \mfrok}
 
-\def\mfodbor{Computer Science}
-\def\program{Computer Science }
+% údaje podľa zadania z AIS2
+\def\mfodbor{ informatika }
+\def\program{ Aplikovaná informatika }
 
 % Ak je školiteľ z FMFI, uvádzate katedru školiteľa, zrejme by mala byť aj na zadaní z AIS2
-% Ak máte externého školiteľa, uvádzajte Katedru informatiky 
-\def\mfpracovisko{ Department of Computer Science }
+% Ak máte externého školiteľa, uvádzajte Katedru informatiky
+\def\mfpracovisko{ Katedra aplikovanej informatiky }
 
-\begin{document}     
+\begin{document}
 \frontmatter
 \pagestyle{empty}
 
+% -------------------
+% --- Obalka ------
+% -------------------
+
 \begin{center}
-  \sc\large
-  Comenius University in Bratislava\\
-  Faculty of Mathematics, Physics and Informatics
+\sc\large
+Univerzita Komenského v Bratislave\\
+Fakulta matematiky, fyziky a informatiky
 
 \vfill
 
@@ -49,24 +88,26 @@
 
 \vfill
 
-{\sc\large 
+{\sc\large
 \noindent \mfrok\\
 \mfautor
 }
 
 \cleardoublepage
+% --- koniec obalky ----
 
 % -------------------
 % --- Titulný list
 % -------------------
 
+
 \noindent
 
 \begin{center}
-\sc  
+\sc
 \large
-  Comenius University in Bratislava\\
-  Faculty of Mathematics, Physics and Informatics
+Univerzita Komenského v Bratislave\\
+Fakulta matematiky, fyziky a informatiky
 
 \vfill
 
@@ -78,11 +119,11 @@
 
 \noindent
 \begin{tabular}{ll}
-Study Programme: & \program \\
-Field of Study: & \mfodbor \\
-Department: & \mfpracovisko \\
-Supervisor: & \mfskolitel \\
-Consultant: & \mfkonzultant \\
+Študijný program: & \program \\
+Študijný odbor: & \mfodbor \\
+Školiace pracovisko: & \mfpracovisko \\
+Školiteľ: & \mfskolitel \\
+Konzultant: & \mfkonzultant \\
 \end{tabular}
 
 \vfill
@@ -92,38 +133,52 @@ Consultant: & \mfkonzultant \\
 \mfautor
 
 \cleardoublepage
+% --- Koniec titulnej strany
+
 
 % -------------------
 % --- Zadanie z AIS
 % -------------------
 % v tlačenej verzii s podpismi zainteresovaných osôb.
 % v elektronickej verzii sa zverejňuje zadanie bez podpisov
-% v pracach v anglictine anglicke aj slovenske zadanie
+% v pracach v angličtine anglické aj slovenské zadanie
 
 \newpage
 \setcounter{page}{3}
 \includepdf{images/zadanie.pdf}
 
-% \includepdf{images/zadanie-en.pdf}
-
 % --- Koniec zadania
+
 
 % -------------------
 %   Čestné vyhlásenie a nepovinné poďakovanie
 % -------------------
-\newpage 
+\newpage
 \pagestyle{plain}
-~
+\paragraph{Čestné vyhlásenie:}
+Čestne vyhlasujem, že celú diplomovú prácu na tému \uv{\mfnazov},
+vrátane všetkých jej príloh a obrázkov, som vypracoval
+samostatne, a to s použitím literatúry uvedenej v priloženom zozname.
 
-\vfill
-{\bf Acknowledgments:} \input chapters/acknowledgment.tex
+% Uveďte na čo ste nástroje používali
+% Podľa typu použitia potom nástroje aj citujte v texte
+Pri príprave tejto práce boli tiež použité nástroje umelej
+inteligencie [ZOZNAM NÁSTROJOV] za účelom [DÔVOD]. Nástroje umelej
+inteligencie som použil v súlade s príslušnými právnymi
+predpismi, akademickými právami a slobodami, etickými a morálnymi
+zásadami za súčasného dodržania akademickej integrity. Som si
+vedomý, že plne zodpovedám za správnosť výsledného textu.
+
+\paragraph{Poďakovanie:} Tu môžete poďakovať školiteľovi, prípadne
+ďalším osobám, ktoré vám s prácou nejako pomohli, poradili,
+poskytli dáta a podobne.
 
 % --- Koniec poďakovania
 
 % -------------------
 %   Abstrakt - Slovensky
 % -------------------
-\newpage 
+\newpage
 \section*{Abstrakt}
 
 
@@ -137,16 +192,16 @@ zavedené v práci, okrem tých, ktoré sú všeobecne známe.
 
 
 % -------------------
-% --- Abstrakt - Anglicky 
+% --- Abstrakt - Anglicky
 % -------------------
-\newpage 
+\newpage
 \section*{Abstract}
 
 Abstract in the English language (translation of the abstract in the
 Slovak language).
 
 
-\paragraph*{Keywords:} 
+\paragraph*{Keywords:}
 
 % --- Koniec Abstrakt - Anglicky
 
@@ -154,17 +209,17 @@ Slovak language).
 % --- Obsah
 % -------------------
 
-\cleardoublepage 
 
+\cleardoublepage
 \tableofcontents
 
-% --- Koniec Obsahu
+% ---  Koniec Obsahu
 
 % -------------------
 % --- Zoznamy tabuliek, obrázkov, skratiek, slovník - nepovinné
 % -------------------
 
-\newpage 
+\newpage
 
 \listoffigures
 \listoftables
@@ -174,42 +229,38 @@ Slovak language).
 \mainmatter
 \pagestyle{headings}
 
-\input{chapters/intro.tex}
 
+\input{chapters/uvod.tex}
 
-\input{chapters/requirements.tex}
+\input{chapters/kapitola.tex}
 
-
-\input{chapters/conclusion.tex}
+\input{chapters/zaver.tex}
 
 % -------------------
 % --- Bibliografia
 % -------------------
 
-\newpage	
+
+\newpage
+
 \backmatter
+
 \thispagestyle{empty}
 \clearpage
-\addcontentsline{toc}{chapter}{References}
+\addcontentsline{toc}{chapter}{Literatúra}
 \bibliographystyle{plain}
-\bibliography{bibliography} 
+\bibliography{bibliography}
 
-% ---koniec Referencii
+%---koniec Referencii
 
 % -------------------
-% --- Prilohy---
+%--- Prilohy---
 % -------------------
 
-% Nepovinná časť prílohy obsahuje materiály, ktoré neboli zaradené priamo  do textu. Každá príloha sa začína na novej strane.
-% Zoznam príloh je súčasťou obsahu.
+%Nepovinná časť prílohy obsahuje materiály, ktoré neboli zaradené priamo  do textu. Každá príloha sa začína na novej strane.
+%Zoznam príloh je súčasťou obsahu.
 \input{chapters/appendixA.tex}
 
 \input{chapters/appendixB.tex}
 
 \end{document}
-
-
-
-
-
-
