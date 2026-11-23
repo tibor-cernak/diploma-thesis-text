@@ -1,0 +1,60 @@
+\chapter{Súčasný stav riešenej problematiky}
+\label{kap:sucasny-stav-problematiky}
+
+\section{Správa zraniteľností}
+\label{sec:sprava-zranitelnosti}
+
+Súčasné organizácie prevádzkujú veľké množstvo zariadení, v ktorých sa inštalovaný softvér a jeho konfigurácia neustále mení.
+Táto dynamika je ešte viac posilnená zmenami v prostredí zraniteľností, kde sú nové zraniteľnosti objavované a verejne zverejňované denne.
+Nedostatočná inventarizácia a oneskorená detekcia zraniteľných verzií softvéru môže predstavovať významné bezpečnostné riziko.
+
+Správa zraniteľností preto nie je jednorazovou činnosťou, ale nepretržitým cyklom zberu údajov, analýzy, prioritizácie, nápravy a overenia.
+
+Zber údajov v prvom kroku rozdeľujeme na interný a externý. Interný zber údajov zahŕňa zhromažďovanie informácií o prostredií organizácie,
+čo predstavuje informácie o pripojených zariadeniach v sieti, ich operačnom systéme, nainštalovanom softvéri 
+a jeho verziach a pri použití niektorých nástrojov na detekciu zraniteľností aj o konkrétnych zraniteľnostiach.
+Externý zber údajov zahŕňa získavanie informácií o zraniteľnostiach z verejne dostupných zdrojov.
+Keďže oba typy údajov rýchlo prestávajú byť aktuálne, je potrebné zber vykonávať pravidelne.
+
+Pri analýze porovnávame zozbieraný inventár so známymi zraniteľnosťami s cieľom určiť, ktoré zariadenia sú zraniteľné. 
+Keďže počet nájdených zraniteľností pri jednotlivých zariadeniach môže dosahovať aj desiatky či stovky a zdroje na ich
+odstránenie sú limitované, je potrebná ich prioritizácia, pri ktorej sa zohľadňuje aktívne zneužívanie v praxi a kritickosť daného aktíva pre prevádzku.
+
+Utriedené zraniteľnosti následne odstraňujeme prostredníctvom aktualizácií alebo v prípadoch, keď oprava nie je dostupná,
+dočasným zmiernením rizika. 
+Na záver overujeme, či boli riešené zraniteľnosti úspešne odstránené, a zároveň získavame informácie o nových zraniteľnostiach,
+čím sa celý cyklus začína odznova.
+
+\section{Identifikácia a hodnotenie zraniteľností}
+\label{sec:identifikacia-zranitelnost-a-prioritizacia}
+
+Kvôli potrebe jednotnej identifikácie zraniteľností naprieč rôznymi nástrojmi a databázmi vznikol systém CVE (Common Vulnerabilities and Exposures), 
+ktorý slúži ako štandardizovaný systém na označovanie známych bezpečnostných zraniteľností. 
+S narastajúcim množstvom zraniteľností bolo potrebné určiť aj ich závažnosť, aby sa uprednostnili kritickejšie. Na tento účel vznikol
+systém CVSS (Common Vulnerability Scoring System), ktorý hodnotí závažnosť zraniteľnosti číselným skóre. 
+Neskôr tento systém doplnili aj iné ukazovatele, CISA KEV (Known Exploited Vulnerabilities) a EPSS (Exploit Prediction Scoring System)
+
+
+\subsection{Identifikácia zraniteľností}
+\label{subsec:identifikacia-zranitelnosti}
+\subsubsection*{CVE}
+Výskumná a vývojová organizácia financovaná vládou USA, The MITRE Corporation, vyvinula v roku 1999 systém CVE. 
+Každej verejne známej zraniteľnosti v oblasti informačnej bezpečnosti je priradený jednoznačný identifikátor 
+CVE Identifier (tiež známy ako CVE ID), ktorý má tvar CVE-YYYY-XXXX, kde YYYY je rok zverejnenia a XXXX je číslo 
+pozostávajúce zo štyroch (alebo viac) číslic. Záznamy CVE sú stručné, obsahujú krátky opis, dotknuté produkty a referencie.
+Bližšie informácie o rizikách, dôsledkoch, referencie na opravy a hodnotení závažnosti zraniteľností sa nachádzajú v iných
+databázach, z ktorých najznámejšia je National Vulnerability Database (NVD).
+CVE číslovacia autorita (CVE Numbering Authority - CNA) je organizácia oprávnená prideľovať CVE 
+identifikátory a zabezpečuje vytvorenie a zverejnenie informácií o zraniteľnosti v danom zázname CVE.
+V čase písania tejto práce existuje vyše 500 CNA, pozostávajúcich z bezpečnostných spoločností, výskumných organizácií a dodávateľov
+softvéru a hardvéru, ako Microsoft, Apple, Cisco a pod. \cite{cvePartners}. Na Slovensku pôsobia tri organizácie s rolou CNA, z ktorých za zmienku 
+stoja Národné centrum kybernetickej bezpečnosti SK-CERT a spoločnosť ESET. Každá CNA dostáva blok identifikátorov CVE,
+ktoré následne priraďuje k novoobjaveným zraniteľnostiam v rámci svojej pôsobnosti.
+
+\subsubsection*{CPE}
+
+\subsubsection*{CWE}
+\subsection{Hodnotenie a prioritizácia zraniteľností}
+\label{subsec:hodnotenie-a-prioritizacia-zranitelnosti}
+
+
