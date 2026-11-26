@@ -1,8 +1,8 @@
 \chapter{Súčasný stav riešenej problematiky}
-\label{kap:sucasny-stav-problematiky}
+\label{kap:sucasnyStav}
 
 \section{Správa zraniteľností}
-\label{sec:sprava-zranitelnosti}
+\label{sec:spravaZranitelnosti}
 
 Súčasné organizácie prevádzkujú veľké množstvo zariadení, v ktorých sa inštalovaný softvér a jeho konfigurácia neustále mení.
 Táto dynamika je ešte viac posilnená zmenami v prostredí zraniteľností, kde sú nové zraniteľnosti objavované a verejne zverejňované denne.
@@ -26,7 +26,7 @@ Na záver overujeme, či boli riešené zraniteľnosti úspešne odstránené, a
 čím sa celý cyklus začína odznova.
 
 \section{Identifikácia a hodnotenie zraniteľností}
-\label{sec:identifikacia-zranitelnost-a-prioritizacia}
+\label{sec:identifikaciaHodnotenie}
 
 Kvôli potrebe jednotnej identifikácie zraniteľností naprieč rôznymi nástrojmi a databázmi vznikol systém CVE (Common Vulnerabilities and Exposures), 
 ktorý slúži ako štandardizovaný systém na označovanie známych bezpečnostných zraniteľností. 
@@ -36,7 +36,7 @@ Neskôr tento systém doplnili aj iné ukazovatele, CISA KEV (Known Exploited Vu
 
 
 \subsection{Identifikácia zraniteľností}
-\label{subsec:identifikacia-zranitelnosti}
+\label{subsec:identifikaciaZranitelnosti}
 \subsubsection*{CVE}
 Výskumná a vývojová organizácia financovaná vládou USA, The MITRE Corporation, vyvinula v roku 1999 systém CVE. 
 Každej verejne známej zraniteľnosti v oblasti informačnej bezpečnosti je priradený jednoznačný identifikátor 
@@ -53,8 +53,104 @@ ktoré následne priraďuje k novoobjaveným zraniteľnostiam v rámci svojej p�
 
 \subsubsection*{CPE}
 
+Zatiaľ čo samotný záznam CVE hovorí o existencii zraniteľnosti, CPE (Common Platform Enumeration) slúži na jednoznačné 
+určenie produktu a jeho verzie, ktoré sú zraniteľnosťou zasiahnuté.
+CPE je štrukturovaný systém pomenúvania na jednoznačnú identifikáciu softvéru, operačných systémov, hardvéru, spravovaný
+organizáciou NIST (The National Institute of Standards and Technology).
+
+Formát CPE vyzerá nasledovne \cite{cheikes2011cpe23}:
+\begin{verbatim}
+  cpe:cpe_version:part:vendor:product:version:update:edition:language:
+  sw_edition:target_sw:target_hw:other
+\end{verbatim}
+kde 
+\begin{itemize}
+    \item \texttt{cpe\_version} - verzia CPE, najnovšia verzia je 2.3.
+    \item \texttt{part} - typ produktu: \texttt{a} (aplikácia), \texttt{o} (operačný systém), \texttt{h} (hardvér).
+    \item \texttt{vendor} - názov výrobcu alebo dodávateľa produktu.
+    \item \texttt{product} - názov produktu.
+    \item \texttt{version} - verzia produktu.
+    \item \texttt{update} - konkrétna aktualizácia alebo záplata.
+    \item \texttt{edition} - edícia produktu (v CPE 2.3 zastarané).
+    \item \texttt{language} - jazyk produktu podľa IETF RFC 5646 (napr. \texttt{en-US}, \texttt{sk-SK}).
+    \item \texttt{sw\_edition} - špecifické vydanie pre konkrétny trh (napr. \texttt{pro}, \texttt{community}).
+    \item \texttt{target\_sw} - špecifikácia softvérového prostredia, v ktorom produkt beží.
+    \item \texttt{target\_hw} - špecifikácia hardvéru, na ktorom produkt beží (napr. \texttt{x86}).
+    \item \texttt{other} - doplňujúce informácie.
+\end{itemize}
+V reťazci sa môžu vyskytovať aj zástupné hodnoty (wildcard character) \texttt{*} označujúce ľubovoľnú hodnotu a \texttt{-} označujúce nepoužiteľné pole.
+Príklad CPE 2.3 pre aplikáciu 7-zip s verziou 3.13 pre Windows:
+\begin{verbatim}
+    cpe:2.3:a:7-zip:7-zip:3.13:*:*:*:*:windows:*:*
+\end{verbatim}
+
+Identifikátory CPE sú verejne dostupné v oficiálnom slovníku CPE (CPE Dictionary), ktorý
+spravuje už spomínaný NIST v rámci databázy NVD (National Vulnerability Database).
+V praxi pri správe zraniteľností sa po vygenerovaní zoznamu nainštalovaného softvéru a jeho verzií tento softvér najprv 
+namapuje na zodpovedajúce identifikátory CPE, a to buď pomocou preddefinovaných priradení, alebo automatizovaných nástrojov.
+Príslušné identifikátory CPE sa následne použijú na vyhľadanie zodpovedajúcich záznamov CVE cez rozhranie NVD NIST API.
+Toto mapovanie softvéru s jeho verziou na CPE má však viacero obmedzení, ktorým sa venujeme v \ref{sec:obmedzeniaParovania}.
+
 \subsubsection*{CWE}
+CWE (Common Weakness Enumeration) je štandardizovaný zoznam bežných typov slabín softvéru a hardvéru, ktoré môžu mať dopad na bezpečnosť, 
+spravovaný organizáciou MITRE. 
+Obsahuje viac ako 900 typov slabín (napr. SQL injection, cross-site scripting alebo buffer overflow) usporiadaných do kategórií,
+pričom MITRE z nich zostavuje aj rebríček najnebezpečnejších slabín CWE Top 25 \cite{mitreCWE}. Ku každému záznamu CVE býva
+spravidla priradená jedna alebo viac kategórií CWE, ktoré určujú typ slabín, čo spôsobujú danú zraniteľnosť.
+
 \subsection{Hodnotenie a prioritizácia zraniteľností}
-\label{subsec:hodnotenie-a-prioritizacia-zranitelnosti}
+S narastajúcim počtom softvéru a zraniteľností a obmedzenými zdrojmi na ich odstránenie sa prioritizácia stáva čoraz dôležitejšou.
+Medzi základné ukazovatele patria závažnosť (CVSS), prevdepodobnosť zneužitia (EPSS) a potvrdené zneužitie v praxi 
+(CISA KEV)
+
+\subsubsection*{CVSS}
+CVSS je otvorený štandard, ktorý spravuje organizácia FIRST a slúži na hodnotenie závažnosti zraniteľnosti 
+na stupnici od 0.0 do 10.0.
+Každé skóre možno previesť na kvalitatívne hodnotenie, ktorými sú None (0.0), Low (0.1-3.9), Medium (4.0-6.9), High (7.0-8.9) a Critical (9.0-10.0).
+CVSS skóre sa skladá a odvodzuje z troch skupín metrík: Základná (Base), Dočasná (Temporal) a Environmentálna (Environmental).
+
+Základná metrika meria vnútorné vlastnosti samotnej zraniteľnosti, ktoré sa nemenia v závislosti od času a rôznych používateľských prostrediach.
+Pozostáva z metrík Zneužiteľnosti (Exploitability) a metrík Dopadu (Impact).
+Zneužiteľnosť vyjadruje, ako ľahko a akými technickými prostriedkami sa dá zraniteľnosť zneužiť. Patria sem:
+\begin{itemize}
+    \item Attack Vector (AV) - ako môže byť zraniteľnosť zneužitá (sieť, priľahlá sieť, lokálne, fyzicky).
+    \item Attack Complexity (AC) - opisuje podmienky, ktoré sú mimo kontroly útočníka a musia byť splnené, aby bolo možné zraniteľnosť zneužiť.
+    \item Privileges Required (PR) - určuje, akú úroveň oprávnenia musí mať útočník, aby bolo zneužitie možné.
+    \item User Interaction (UI) - vyjadruje, či sa na zneužití musí podieľať aj iná osoba, než samotný útočník.
+\end{itemize}
+
+Metriky Dopadu vyjadrujú následky úspešného zneužitia na tri vlastnosti systému:
+\begin{itemize}
+    \item Confidentiality (C) - vyjadruje mieru dopadu na dôvernosť údajov spravovaných systémom.
+    \item Integrity (I) - meria vplyv zneužitej zraniteľnosti na spoľahlivosť a pravdivosť informácií.
+    \item Availability (A) - určuje dopad na dostupnosť systému po úspešne zneužitej zraniteľnosti.
+\end{itemize}
+
+Medzi Základné metriky patrí ešte metrika Rozsah (Scope), ktorá hodnotí, či zraniteľnosť v jednom komponente
+ovplyvňuje aj ďalšie, oddelené komponenty mimo jeho bezpečnostného rozsahu.
+
+Dočasná metrika zohľadňuje, ako sa zraniteľnosť vyvíja v čase - napríklad aktuálny stav techník jej zneužitia, 
+dostupnosť opráv alebo spoľahlivosť jej popisu. 
+To v praxi znamená, že existencia ľahko použiteľného kódu na zneužitie zraniteľnosti by skóre zvýšila, 
+zatiaľ čo vydanie opravy zraniteľnosti by ho znížilo.
+Environmentálna metrika prispôsobuje skóre špecifickým podmienkam v rámci konkrétnej organizácie.
+Obe skupiny metrík nie sú povinné a základné skóre iba upravujú.
+
+Vyššie opísané metriky zodpovedajú verzii CVSS v3.x, ktorá aj napriek tomu, že aktuálna verzia je CVSS v4.1, je v praxi najčastejšie používana.
+
+Verzia CVSS v4.0 prináša nové metriky, zjednodušuje existujúce a ponúka nové metódy na výpočet skóre \cite{cvssComparison2024}.
+Aktuálna verzia pridáva novú skupinu metrík Supplemental, ktorá neovplyvňuje výsledné CVSS skóre, ale poskytuje dodatočné informácie o zraniteľnosti, 
+a mení skupinu Temporal na Threat.
+Metrika Scope bola odstránená a nahradená rozdelením metriky dopadu na metriku dopadu zraniteľného systému (Vulnerable system) 
+a metriku dopadu následných systémov (Subsequent systems).
+Attack Requirements (AT) je nová metrika v skupine Base, ktorá opisuje podmienky prostredia potrebné na úspešné zneužitie zraniteľnosti. 
+Oddeľuje ich od metriky Attack Complexity (AC), ktorá vo verzii CVSS 4.0 vyjadruje, aké obranné mechanizmy systému musí útočník prekonať.
+
+
+\section{Obmedzenia párovania softvéru na zraniteľnosti}
+\label{sec:obmedzeniaParovania}
+
+
+\label{subsec:hodnoteniePrioritizacia}
 
 
